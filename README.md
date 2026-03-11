@@ -26,25 +26,25 @@ Each row represents a unique SKU (Stock Keeping Unit) for a product. Duplicate p
 
 🧾 Columns:
 
-    * sku_id: Unique identifier for each product entry (Synthetic Primary Key)
+   * sku_id: Unique identifier for each product entry (Synthetic Primary Key)
 
-    * name: Product name as it appears on the app
+   * name: Product name as it appears on the app
 
-    * category: Product category like Fruits, Snacks, Beverages, etc.
+   * category: Product category like Fruits, Snacks, Beverages, etc.
 
-    * mrp: Maximum Retail Price (originally in paise, converted to ₹)
+   * mrp: Maximum Retail Price (originally in paise, converted to ₹)
 
-    * discountPercent: Discount applied on MRP
+   * discountPercent: Discount applied on MRP
 
-    * discountedSellingPrice: Final price after discount (also converted to ₹)
+   * discountedSellingPrice: Final price after discount (also converted to ₹)
 
-    * availableQuantity: Units available in inventory
+   * availableQuantity: Units available in inventory
 
-    * weightInGms: Product weight in grams
+   * weightInGms: Product weight in grams
 
-    * outOfStock: Boolean flag indicating stock availability
+   * outOfStock: Boolean flag indicating stock availability
 
-    * quantity: Number of units per package (mixed with grams for loose produce)
+   * quantity: Number of units per package (mixed with grams for loose produce)
 
 🛠 Tools & Technologies
 
@@ -59,24 +59,18 @@ Each row represents a unique SKU (Stock Keeping Unit) for a product. Duplicate p
 
 🔧 Project Workflow
 
-Kaggle Dataset
-      ↓
-Data Import into PostgreSQL
-      ↓
-Data Cleaning
-      ↓
-Exploratory Data Analysis
-      ↓
-Business Analysis Queries
-      ↓
-Business Insights & Recommendations
+Kaggle Dataset → Data Import into PostgreSQL → Data Cleaning → Exploratory Data Analysis→ Business Analysis Queries →Business Insights & Recommendations
+ 
+
 
 
 Here’s a step-by-step breakdown of what we do in this project:
 1. Database & Table Creation
 
-* We start by creating a SQL table with appropriate data types:
-CREATE TABLE zepto (
+ We start by creating a SQL table with appropriate data types:
+
+  ```sql
+  CREATE TABLE zepto (
   sku_id SERIAL PRIMARY KEY,
   category VARCHAR(120),
   name VARCHAR(150) NOT NULL,
@@ -88,38 +82,57 @@ CREATE TABLE zepto (
   outOfStock BOOLEAN,
   quantity INTEGER
 );
-
+```
 2. Data Import
 
-    * Loaded CSV using pgAdmin's import feature.
+  * Loaded CSV using pgAdmin's import feature.
 
-   * If you're not able to use the import feature, write this code instead:
+  * If you're not able to use the import feature, write this code instead:
    
-    \copy zepto(category,name,mrp,discountPercent,availableQuantity,
+  ```
+   \copy zepto(category,name,mrp,discountPercent,availableQuantity,
             discountedSellingPrice,weightInGms,outOfStock,quantity)
-  FROM 'data/zepto_v2.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', QUOTE '"', ENCODING 'UTF8');
-
+  FROM 'data/zepto_v2.csv' WITH (FORMAT csv, HEADER true, DELIMITER ',', QUOTE '"', ENCODING 'UTF8'); 
+  ```
+    
+    
    * Faced encoding issues (UTF-8 error), which were fixed by saving the CSV file using CSV UTF-8 format.
 
-   3. 🔍 Data Exploration
+3. 🔍 Data Exploration
 
-    * Counted the total number of records in the dataset
+* Counted the total number of records in the dataset
 
-    * Viewed a sample of the dataset to understand structure and content
+* Viewed a sample of the dataset to understand structure and content
 
-    * Checked for null values across all columns
+*  Checked for null values across all columns
 
-    * Identified distinct product categories available in the dataset
+*  Identified distinct product categories available in the dataset
 
-    * Compared in-stock vs out-of-stock product counts
+*  Compared in-stock vs out-of-stock product counts
 
-    * Detected products present multiple times, representing different SKUs
+*  Detected products present multiple times, representing different SKUs
 
 4. 🧹 Data Cleaning
 
-    * Identified and removed rows where MRP or discounted selling price was zero
+* Identified and removed rows where MRP or discounted selling price was zero
 
-    * Converted mrp and discountedSellingPrice from paise to rupees for consistency and readability
+* Converted mrp and discountedSellingPrice from paise to rupees for consistency and readability
+
+
+ 
+ 
+ 
+ 
+ 
+SQL QUERY from project 
+
+ Price per gram
+  <img width="1329" height="880" alt="Best_value_products" src="https://github.com/user-attachments/assets/a4aaca14-fd36-4895-893a-ccd140e6002a" />
+
+  Revenue by category
+  <img width="1172" height="879" alt="Revenue_by_category" src="https://github.com/user-attachments/assets/f689a0c1-e7ff-4700-b027-a61b9f064f11" />
+  
+  
 
 5.    📊 Business Insights
 
@@ -148,6 +161,13 @@ Price-per-gram analysis identifies products offering superior value for customer
 Several high-priced products are out of stock, which may represent missed revenue opportunities.
 
 
+Items with high MRP but out of stock
+
+<img width="1200" height="793" alt="out_of_stock" src="https://github.com/user-attachments/assets/8b300254-4652-4d7b-b0bf-1e35a8c9574d" />
+
+----------------------------------------------------------------------------------------------------------------------
+
+
 💡Recommendations-
 Based on the analysis, the following recommendations can be made:
 
@@ -168,11 +188,16 @@ Based on the analysis, the following recommendations can be made:
   Highlight products with lower price-per-gram ratios to attract price-sensitive customers.
 
   SQUERY VIEW-
-  <img width="1329" height="880" alt="Best_value_products" src="https://github.com/user-attachments/assets/a4aaca14-fd36-4895-893a-ccd140e6002a" />
+Top 3 expensive products per category
+
 <img width="1349" height="883" alt="Expensive_products_per_category" src="https://github.com/user-attachments/assets/871e7cec-3569-45c7-a556-a9eac73f29ee" />
+
+Highest discount percentage
 <img width="1260" height="875" alt="Highest_discount_pct" src="https://github.com/user-attachments/assets/7c96a51e-4240-4204-aff6-f07580a065ae" />
-<img width="1200" height="793" alt="out_of_stock" src="https://github.com/user-attachments/assets/8b300254-4652-4d7b-b0bf-1e35a8c9574d" />
-<img width="1172" height="879" alt="Revenue_by_category" src="https://github.com/user-attachments/assets/f689a0c1-e7ff-4700-b027-a61b9f064f11" />
+
+
+
+
 
 
 
